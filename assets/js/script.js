@@ -5,9 +5,13 @@ var nameInputEl = document.querySelector("#city-name");
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
+    //clear the screen
+    //save the prior search city to localStorage
+    // Create a button below the search bar with the prompt
+    
 
     var cityName = nameInputEl.value.trim();
-
+    $(".search-history").append("<button>"+cityName+"</button><br>");
     if (cityName) {
         getCityForecast(cityName);
         nameInputEl.value = "";
@@ -65,7 +69,7 @@ var postCityForecast = function(data) {
     console.log(todayDate);
 
 }
-getCityForecast();
+// getCityForecast();
 userFormEl.addEventListener("submit", formSubmitHandler)
 //city name is data.city.name
 //latitude is data.city.coord.lat
