@@ -3,12 +3,17 @@ const apiId = "9fc458557b2ca6684dc057eb5782a51f";
 var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#city-name");
 
+var clearPriorSearch = function() {
+$(".today-report").find("p", "h2").detach();
+$("data-id-1").find("p").empty();
+}
+
 var formSubmitHandler = function(event) {
     event.preventDefault();
     //clear the screen
     //save the prior search city to localStorage
     // Create a button below the search bar with the prompt
-    
+    clearPriorSearch();
 
     var cityName = nameInputEl.value.trim();
     $(".search-history").append("<button>"+cityName+"</button><br>");
@@ -23,6 +28,8 @@ var formSubmitHandler = function(event) {
     // console.log(event);
 }
 
+
+
 var getCityForecast = function(cityName) {
     
 fetch("https://api.openweathermap.org/data/2.5/forecast?q="+cityName+"&units=imperial&appid="+apiId)
@@ -32,6 +39,7 @@ fetch("https://api.openweathermap.org/data/2.5/forecast?q="+cityName+"&units=imp
         postCityForecast(data);
         var lat = data.city.coord.lat;
         var lon = data.city.coord.lon;
+        var cityName = data.city.name;
         fetchTodayData(lat, lon);
     });
 })
@@ -48,6 +56,8 @@ var fetchTodayData = function(lat, lon) {
 }
 
 var postCityToday = function(data) {
+    
+
     $(".today-report").find(".col-12").append("<p>Temperature: "+data.current.temp+" degrees Fahrenheit</p>")
     $(".today-report").find(".col-12").append("<p>Humidity: "+data.current.humidity+"%</p>")
     $(".today-report").find(".col-12").append("<p>Wind-speed: "+data.current.wind_speed+"kn</p>")
@@ -56,6 +66,12 @@ var postCityToday = function(data) {
 }
 
 var postCityForecast = function(data) {
+    cityName = data.city.name;
+    var todayDate = moment().format("ddd, MMMM Do YYYY");
+    var todayHeader = $("<h2>")
+    .text(cityName+" ("+todayDate +") ");
+    $(".today-report").find(".col-12").append(todayHeader);
+
     var dayForecast = 1;
     for(i=0; i<40; i+=8) {
         $(".data-id-" + dayForecast).find(".card-title").append(data.list[i].dt_txt);
@@ -64,9 +80,6 @@ var postCityForecast = function(data) {
         dayForecast++;
         // console.log(data.list[i].main.temp, data.list[i].main.humidity);
     }
-    var todayDate = moment().format("ddd, MMMM Do YYYY");
-    $(".today-report").find("h2").append(data.city.name, "<br>", todayDate );
-    console.log(todayDate);
 
 }
 // getCityForecast();

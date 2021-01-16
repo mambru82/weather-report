@@ -17,21 +17,23 @@
   
     <main class="container justify-space-between">
       <div class = "row">
-        <div class="col-12 col-md-4 search-history">
+        <div class="col-12 col-md-4">
             <h3 class="card-header text-uppercase">Search By City</h3>
             <form id="user-form" class="card-body">
             <label class="form-label" for="city">City</label>
             <input name="city-name" id="city-name" type="text" autofocus="true" class="form-input" />
             <button type="submit" class="btn">Search</button>
             </form> 
+            <ul id="search-history" class="search-history">
+
+            </ul>
         </div>
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-8 today-header">
             <div class = "row today-report">
                 <div class = "col-12">
-                    <h2></h2>
                 </div>
             </div>
-            <div class = "row justify-space-between">
+            <div class = "row justify-space-between forecast">
                 <h2>5 day Forecast</h2>
                 <div class = "col card">
                     <section class="card-body data-id-1">
