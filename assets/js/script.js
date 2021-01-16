@@ -6,10 +6,10 @@ var nameInputEl = document.querySelector("#city-name");
 var formSubmitHandler = function(event) {
     event.preventDefault();
 
-    var username = nameInputEl.value.trim();
+    var cityName = nameInputEl.value.trim();
 
-    if (username) {
-        getUserRepos(username);
+    if (cityName) {
+        getCityForecast(cityName);
         nameInputEl.value = "";
     }
     else {
@@ -19,9 +19,9 @@ var formSubmitHandler = function(event) {
     // console.log(event);
 }
 
-var getCityForecast = function(user) {
+var getCityForecast = function(cityName) {
     
-fetch("https://api.openweathermap.org/data/2.5/forecast?q=Miami&units=imperial&appid="+apiId)
+fetch("https://api.openweathermap.org/data/2.5/forecast?q="+cityName+"&units=imperial&appid="+apiId)
 .then(function(response){
     response.json()
     .then(function(data){
@@ -66,7 +66,7 @@ var postCityForecast = function(data) {
 
 }
 getCityForecast();
-
+userFormEl.addEventListener("submit", formSubmitHandler)
 //city name is data.city.name
 //latitude is data.city.coord.lat
 //longitude is data.city.coord.lon
