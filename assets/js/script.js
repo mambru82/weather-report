@@ -118,7 +118,7 @@ var postCityToday = function(data) {
     $(".today-report").find("h2").append("<img src=http://openweathermap.org/img/wn/" + weatherIcon + ".png />");
     $(".today-report").find(".col-12").append("<p>Temperature: "+data.current.temp+" &#8457</p>")
     $(".today-report").find(".col-12").append("<p>Humidity: "+data.current.humidity+"%</p>")
-    $(".today-report").find(".col-12").append("<p>Wind-speed: "+data.current.wind_speed+"kn</p>")
+    $(".today-report").find(".col-12").append("<p>Wind-speed: "+data.current.wind_speed+"mph</p>")
     $(".today-report").find(".col-12").append("<p class="+uvStatus+">UV index: "+uvIndex+"</p>")
 
 }

@@ -1,14 +1,14 @@
-# Work day scheduler (week 5 challenge)
-This is the web deployment of the Week 5 challenge for the Coding Bootcamp at UT Austin.
+# Weather Report (week 6 challenge)
+This is the web deployment of the Week 6 challenge for the Coding Bootcamp at UT Austin.
 
 [![Screenshot of the deployed web site][screenshot]][1]
 
 ## What it does
-This web application generates a Work day planner. 
-- The user selects a time slot.
-- The user inputs what task they have scheduled for that hour.
-- The user clicks on save and the task is saved to localStorage.
-- The background is color coded based on whether the task is in the future (green), past (gray), or present (red)
+This web application generates a weather report and forecast for a city using the OpenWeather API including: 
+- Today's weather, including temperature, humidity, wind-speed, and UV index.
+- The five day weather forecast
+- The uv-index is color coded based on whether it is low risk (green), moderate (yellow), or high (red).
+- Search history for the past 5 cities is saved in localStorage and on the left of the screen 
 
 ## Installation
 No installation is required. 
@@ -20,6 +20,7 @@ The [website][1] is hosted by github
 - Bootstrap version 5.0.0
 - JQuery version 3.5.1
 - Momentjs version 2.29.1
+- Openweather API
 
 ### Languages used
 - CSS, html, javascript, jQuery
@@ -32,5 +33,5 @@ The [website][1] is hosted by github
 - Web-site is free to use. 
 
 
-[1]: https://mambru82.github.io/work-day-planner/
-[screenshot]: ./assets/images/workday-screenshot.png
+[1]: https://mambru82.github.io/weather-report/
+[screenshot]: ./assets/images/weather-screenshot.png
