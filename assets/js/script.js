@@ -4,8 +4,10 @@ var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#city-name");
 
 var clearPriorSearch = function() {
-$(".today-report").find("p", "h2").detach();
-$("data-id-1").find("p").empty();
+$(".today-report").find("p").detach();
+$(".today-report").find("h2").detach();
+
+$(".forecast-section").children().detach();
 }
 
 var formSubmitHandler = function(event) {
@@ -69,14 +71,30 @@ var postCityForecast = function(data) {
     cityName = data.city.name;
     var todayDate = moment().format("ddd, MMMM Do YYYY");
     var todayHeader = $("<h2>")
-    .text(cityName+" ("+todayDate +") ");
+        .text(cityName+" ("+todayDate +") ");
     $(".today-report").find(".col-12").append(todayHeader);
 
     var dayForecast = 1;
     for(i=0; i<40; i+=8) {
-        $(".data-id-" + dayForecast).find(".card-title").append(data.list[i].dt_txt);
-        $(".data-id-" + dayForecast).find(".temp-class").append(data.list[i].main.temp);
-        $(".data-id-" + dayForecast).find(".humid-class").append(data.list[i].main.humidity, "%");
+        var forecastCardContainerEl= $("<div>")
+            .addClass("col card");
+        var forecastCardBodyEl = $("<section>")
+            .addClass("card-body data-id");
+        var forecastCardTitleEl = $("<h5>")
+            .addClass("card-title")
+            .text(data.list[i].dt_txt);
+        var forecastCardTempEl = $("<p>")
+            .addClass("card-text temp-class")
+            .text(data.list[i].main.temp);
+        var forecastCardHumidEl = $("<p>")
+            .addClass("card-text humid-class")
+            .text(data.list[i].main.humidity);
+        forecastCardBodyEl.append(forecastCardTitleEl, forecastCardTempEl, forecastCardHumidEl);
+        forecastCardContainerEl.append(forecastCardBodyEl);
+        $(".forecast-section").append(forecastCardContainerEl);
+        // $(".data-id-" + dayForecast).find(".card-title").append(data.list[i].dt_txt);
+        // $(".data-id-" + dayForecast).find(".temp-class").append(data.list[i].main.temp);
+        // $(".data-id-" + dayForecast).find(".humid-class").append(data.list[i].main.humidity, "%");
         dayForecast++;
         // console.log(data.list[i].main.temp, data.list[i].main.humidity);
     }
