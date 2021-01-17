@@ -2,6 +2,7 @@
 const apiId = "9fc458557b2ca6684dc057eb5782a51f";
 var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#city-name");
+var searchHistory = [];
 
 var clearPriorSearch = function() {
 $(".today-report").find("p").detach();
@@ -10,6 +11,24 @@ $(".today-report").find("h2").detach();
 $(".forecast-section").children().detach();
 }
 
+var loadHistory = function() {
+    searchHistory = JSON.parse(localStorage.getItem("search-history"));
+
+    if(!searchHistory) {
+        searchHistory = [];
+    }
+
+   for (i=0; i<searchHistory.length; i++) {
+    console.log(searchHistory[i]);
+    createHistoryButton(searchHistory[i]);
+    // console.log($(".search-history"));
+    // $(".search-history").append("<button>"+searchHistory[i]+"</button><br>");
+    }
+}
+
+var createHistoryButton = function(string) {
+    $(".search-history").append("<button>"+string+"</button><br>");
+}
 var formSubmitHandler = function(event) {
     event.preventDefault();
     //clear the screen
@@ -18,7 +37,11 @@ var formSubmitHandler = function(event) {
     clearPriorSearch();
 
     var cityName = nameInputEl.value.trim();
-    $(".search-history").append("<button>"+cityName+"</button><br>");
+    createHistoryButton(cityName);
+    // $(".search-history").append("<button>"+cityName+"</button><br>");
+    // if (cityName in)
+    searchHistory.push(cityName);
+    saveHistory();
     if (cityName) {
         getCityForecast(cityName);
         nameInputEl.value = "";
@@ -60,7 +83,7 @@ var fetchTodayData = function(lat, lon) {
 var postCityToday = function(data) {
     
 
-    $(".today-report").find(".col-12").append("<p>Temperature: "+data.current.temp+" degrees Fahrenheit</p>")
+    $(".today-report").find(".col-12").append("<p>Temperature: "+data.current.temp+" &#8457</p>")
     $(".today-report").find(".col-12").append("<p>Humidity: "+data.current.humidity+"%</p>")
     $(".today-report").find(".col-12").append("<p>Wind-speed: "+data.current.wind_speed+"kn</p>")
     $(".today-report").find(".col-12").append("<p>UV index: "+data.current.uvi+"</p>")
@@ -83,12 +106,13 @@ var postCityForecast = function(data) {
         var forecastCardTitleEl = $("<h5>")
             .addClass("card-title")
             .text(data.list[i].dt_txt);
+        
         var forecastCardTempEl = $("<p>")
             .addClass("card-text temp-class")
-            .text(data.list[i].main.temp);
+            .html("Temp: "+data.list[i].main.temp + "&#8457");
         var forecastCardHumidEl = $("<p>")
             .addClass("card-text humid-class")
-            .text(data.list[i].main.humidity);
+            .text("Humidity: "+data.list[i].main.humidity+"%");
         forecastCardBodyEl.append(forecastCardTitleEl, forecastCardTempEl, forecastCardHumidEl);
         forecastCardContainerEl.append(forecastCardBodyEl);
         $(".forecast-section").append(forecastCardContainerEl);
@@ -100,8 +124,13 @@ var postCityForecast = function(data) {
     }
 
 }
+
+var saveHistory = function() {
+    localStorage.setItem("search-history", JSON.stringify(searchHistory));
+}
 // getCityForecast();
 userFormEl.addEventListener("submit", formSubmitHandler)
+loadHistory();
 //city name is data.city.name
 //latitude is data.city.coord.lat
 //longitude is data.city.coord.lon
