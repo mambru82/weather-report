@@ -19,6 +19,7 @@ var loadHistory = function() {
     }
 
    for (i=0; i<searchHistory.length; i++) {
+       
     console.log(searchHistory[i]);
     createHistoryButton(searchHistory[i]);
     // console.log($(".search-history"));
@@ -28,13 +29,14 @@ var loadHistory = function() {
 
 $(".search-history").on("click",".btn", function(){
     var cityName = $(this).text().trim();
+    clearPriorSearch();
     getCityForecast(cityName);
     console.log(cityName);
 })
 var createHistoryButton = function(string) {
     var buttonListEl = $("<li>");
     var buttonEl = $("<button>")
-        .addClass("btn")
+        .addClass("btn btn-secondary shadow")
         .text(string);
     buttonListEl.append(buttonEl);
     $(".search-history").prepend(buttonListEl);
@@ -95,14 +97,29 @@ var fetchTodayData = function(lat, lon) {
         postCityToday(data);
     })})
 }
-
+var testUvIndex = function(integer){
+    let uvStatus = "";
+    if(integer<=2) {
+        uvStatus = "bg-success";
+    }
+    else if (integer>2 && integer < 6) {
+        uvStatus = "bg-warning";
+    }
+    else {
+        uvStatus = "bg-danger";
+    }
+    return uvStatus;
+}
 var postCityToday = function(data) {
     weatherIcon = data.current.weather[0].icon;
+    uvIndex = data.current.uvi;
+    uvStatus = testUvIndex(uvIndex);
+    console.log(uvIndex, uvStatus);
     $(".today-report").find("h2").append("<img src=http://openweathermap.org/img/wn/" + weatherIcon + ".png />");
     $(".today-report").find(".col-12").append("<p>Temperature: "+data.current.temp+" &#8457</p>")
     $(".today-report").find(".col-12").append("<p>Humidity: "+data.current.humidity+"%</p>")
     $(".today-report").find(".col-12").append("<p>Wind-speed: "+data.current.wind_speed+"kn</p>")
-    $(".today-report").find(".col-12").append("<p>UV index: "+data.current.uvi+"</p>")
+    $(".today-report").find(".col-12").append("<p class="+uvStatus+">UV index: "+uvIndex+"</p>")
 
 }
 
@@ -112,9 +129,11 @@ var postCityForecast = function(data) {
     var todayHeader = $("<h2>")
         .text(cityName+" ("+todayDate +") ");
     $(".today-report").find(".col-12").append(todayHeader);
+    $(".forecast-section").html("<h2>5 day forecast</h2>");
 
     var dayForecast = 1;
     for(i=0; i<40; i+=8) {
+        var formattedDate = moment(data.list[i].dt_txt, "YYYY-MM-DD HH:mm:ss").format("MM/DD/YYYY");
         weatherIcon = data.list[i].weather[0].icon;
         var forecastCardContainerEl= $("<div>")
             .addClass("col card");
@@ -122,7 +141,7 @@ var postCityForecast = function(data) {
             .addClass("card-body data-id");
         var forecastCardTitleEl = $("<h5>")
             .addClass("card-title")
-            .text(data.list[i].dt_txt);
+            .text(formattedDate);
         var forecastIcon = $("<img>")
             .attr("src", "http://openweathermap.org/img/wn/" + weatherIcon + ".png");
         var forecastCardTempEl = $("<p>")
