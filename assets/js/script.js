@@ -26,9 +26,21 @@ var loadHistory = function() {
     }
 }
 
+$(".search-history").on("click",".btn", function(){
+    var cityName = $(this).text().trim();
+    getCityForecast(cityName);
+    console.log(cityName);
+})
 var createHistoryButton = function(string) {
-    $(".search-history").append("<button>"+string+"</button><br>");
+    var buttonListEl = $("<li>");
+    var buttonEl = $("<button>")
+        .addClass("btn")
+        .text(string);
+    buttonListEl.append(buttonEl);
+    $(".search-history").prepend(buttonListEl);
 }
+
+
 var formSubmitHandler = function(event) {
     event.preventDefault();
     //clear the screen
@@ -37,10 +49,12 @@ var formSubmitHandler = function(event) {
     clearPriorSearch();
 
     var cityName = nameInputEl.value.trim();
-    createHistoryButton(cityName);
     // $(".search-history").append("<button>"+cityName+"</button><br>");
     // if (cityName in)
+    if(!searchHistory.includes(cityName)){
     searchHistory.push(cityName);
+    createHistoryButton(cityName);
+    }
     saveHistory();
     if (cityName) {
         getCityForecast(cityName);
@@ -126,6 +140,9 @@ var postCityForecast = function(data) {
 }
 
 var saveHistory = function() {
+    if(searchHistory.length>5) {
+        searchHistory.pop();
+    }
     localStorage.setItem("search-history", JSON.stringify(searchHistory));
 }
 // getCityForecast();
