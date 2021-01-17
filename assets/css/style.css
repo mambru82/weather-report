@@ -20,3 +20,13 @@
   header {
       color: var(--primary);
   }
+
+  .card-body{
+      color: white;
+  }
+
+  .city-info{
+      color: white;
+      padding: 5px;
+      border-radius: 5px;
+  }

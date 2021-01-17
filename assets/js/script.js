@@ -126,7 +126,7 @@ var postCityToday = function(data) {
 var postCityForecast = function(data) {
     cityName = data.city.name;
     var todayDate = moment().format("ddd, MMMM Do YYYY");
-    var todayHeader = $("<h2>")
+    var todayHeader = $("<h2 class = 'bg-primary city-info'>")
         .text(cityName+" ("+todayDate +") ");
     $(".today-report").find(".col-12").append(todayHeader);
     $(".forecast-section").html("<h2>5 day forecast</h2>");
@@ -136,9 +136,9 @@ var postCityForecast = function(data) {
         var formattedDate = moment(data.list[i].dt_txt, "YYYY-MM-DD HH:mm:ss").format("MM/DD/YYYY");
         weatherIcon = data.list[i].weather[0].icon;
         var forecastCardContainerEl= $("<div>")
-            .addClass("col card");
+            .addClass("col-2 card ms-auto bg-primary");
         var forecastCardBodyEl = $("<section>")
-            .addClass("card-body data-id");
+            .addClass("card-body ms-auto data-id");
         var forecastCardTitleEl = $("<h5>")
             .addClass("card-title")
             .text(formattedDate);
