@@ -53,6 +53,7 @@ var formSubmitHandler = function(event) {
     // if (cityName in)
     if(!searchHistory.includes(cityName)){
     searchHistory.push(cityName);
+    console.log(searchHistory);
     createHistoryButton(cityName);
     }
     saveHistory();
@@ -75,6 +76,7 @@ fetch("https://api.openweathermap.org/data/2.5/forecast?q="+cityName+"&units=imp
 .then(function(response){
     response.json()
     .then(function(data){
+        console.log(data);
         postCityForecast(data);
         var lat = data.city.coord.lat;
         var lon = data.city.coord.lon;
@@ -89,14 +91,14 @@ var fetchTodayData = function(lat, lon) {
     fetch("https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=imperial&appid="+apiId)
     .then(function(response){response.json()
     .then(function(data){
-        console.log(data);
+        console.log(data.current.weather[0].icon);
         postCityToday(data);
     })})
 }
 
 var postCityToday = function(data) {
-    
-
+    weatherIcon = data.current.weather[0].icon;
+    $(".today-report").find("h2").append("<img src=http://openweathermap.org/img/wn/" + weatherIcon + ".png />");
     $(".today-report").find(".col-12").append("<p>Temperature: "+data.current.temp+" &#8457</p>")
     $(".today-report").find(".col-12").append("<p>Humidity: "+data.current.humidity+"%</p>")
     $(".today-report").find(".col-12").append("<p>Wind-speed: "+data.current.wind_speed+"kn</p>")
@@ -113,6 +115,7 @@ var postCityForecast = function(data) {
 
     var dayForecast = 1;
     for(i=0; i<40; i+=8) {
+        weatherIcon = data.list[i].weather[0].icon;
         var forecastCardContainerEl= $("<div>")
             .addClass("col card");
         var forecastCardBodyEl = $("<section>")
@@ -120,14 +123,15 @@ var postCityForecast = function(data) {
         var forecastCardTitleEl = $("<h5>")
             .addClass("card-title")
             .text(data.list[i].dt_txt);
-        
+        var forecastIcon = $("<img>")
+            .attr("src", "http://openweathermap.org/img/wn/" + weatherIcon + ".png");
         var forecastCardTempEl = $("<p>")
             .addClass("card-text temp-class")
             .html("Temp: "+data.list[i].main.temp + "&#8457");
         var forecastCardHumidEl = $("<p>")
             .addClass("card-text humid-class")
             .text("Humidity: "+data.list[i].main.humidity+"%");
-        forecastCardBodyEl.append(forecastCardTitleEl, forecastCardTempEl, forecastCardHumidEl);
+        forecastCardBodyEl.append(forecastCardTitleEl, forecastIcon, forecastCardTempEl, forecastCardHumidEl);
         forecastCardContainerEl.append(forecastCardBodyEl);
         $(".forecast-section").append(forecastCardContainerEl);
         // $(".data-id-" + dayForecast).find(".card-title").append(data.list[i].dt_txt);
@@ -141,7 +145,8 @@ var postCityForecast = function(data) {
 
 var saveHistory = function() {
     if(searchHistory.length>5) {
-        searchHistory.pop();
+        searchHistory.shift();
+        console.log(searchHistory);
     }
     localStorage.setItem("search-history", JSON.stringify(searchHistory));
 }
@@ -154,3 +159,5 @@ loadHistory();
 //temperature is data.list[day in 8hr intervals].main.temp
 //humidity is dta.list[day in 8hr intervals].main.humidity
 //date is data.list[day in 8hr intervals].dt_txt
+//image is data.current.weather[0].icon
+//http://openweathermap.org/img/wn/" + weatherIcon + ".png" 
