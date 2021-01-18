@@ -136,7 +136,7 @@ var postCityForecast = function(data) {
         var formattedDate = moment(data.list[i].dt_txt, "YYYY-MM-DD HH:mm:ss").format("MM/DD/YYYY");
         weatherIcon = data.list[i].weather[0].icon;
         var forecastCardContainerEl= $("<div>")
-            .addClass("col-2 card ms-auto bg-primary");
+            .addClass("col-12 col-lg-2 card ms-auto bg-primary");
         var forecastCardBodyEl = $("<section>")
             .addClass("card-body ms-auto data-id");
         var forecastCardTitleEl = $("<h5>")
